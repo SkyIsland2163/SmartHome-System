@@ -357,38 +357,11 @@ const movieBtn = new Button('Movie', movieMacro);
 
 ---
 
-## GitHub Pages 배포
-
-### 방법 1: 루트에 index.html 배포 (권장)
-```bash
-# 파일 이름 변경
-code/smart_home_visual_demo.html → index.html (루트에 배치)
-
-# 깃 커밋 및 푸시
-git add index.html
-git commit -m "Deploy to GitHub Pages"
-git push origin main
-```
-
-**접근 주소**: `https://skyisland2163.github.io/SmartHome-System/`
-
-### 방법 2: GitHub Pages 설정에서 폴더 지정
-1. Repository Settings → Pages
-2. Source Branch: `main`, Folder: `/code` 선택
-3. `code/smart_home_visual_demo.html` → `code/index.html` 이름 변경
-4. 저장 (약 1-2분 후 활성화)
-
-**접근 주소**: `https://skyisland2163.github.io/SmartHome-System/`
-
----
-
 ## 개발팀
 
 - **이대성** (Team Lead)
 - **김태윤** (Design & UI)
 - **김민재** (Backend Logic)
-
-**과목**: 웹시스템개발1 (2025-1학기)
 
 ---
 
@@ -398,12 +371,6 @@ git push origin main
 
 ---
 
-## 참고 자료
-
-### 디자인 패턴 참고 도서
-- "Design Patterns: Elements of Reusable Object-Oriented Software" - Gang of Four
-- "Head First Design Patterns"
-
 ### 관련 기술
 - JavaScript (ES6+)
 - HTML5 & CSS3
@@ -411,25 +378,3 @@ git push origin main
 
 ---
 
-## FAQ
-
-**Q: 왜 이렇게 복잡한 패턴을 사용하나요?**
-A: 작은 프로젝트에서는 과설계처럼 보이지만, 장치 10개, 시나리오 100개가 되면 이 구조 없이는 관리 불가능합니다.
-
-**Q: 웹페이지가 404 오류를 보여줍니다.**
-A: GitHub Pages 배포 방법 1 또는 2를 따르세요. `index.html` 파일이 정확한 위치에 있어야 합니다.
-
-**Q: 새로운 시나리오를 추가하려면?**
-A: 새로운 `MacroCommand` 객체를 만들고 `Button`과 연결하기만 하면 됩니다. 기존 코드 수정 불필요!
-
----
-
-## 빠른 링크
-
-- GitHub 리포지토리: https://github.com/SkyIsland2163/SmartHome-System
-- 웹 대시보드: https://skyisland2163.github.io/SmartHome-System/
-- 프로젝트 보고서: ./프로젝트%20보고서%20곤고_이대성_김태윤_김민재.hwp
-
----
-
-**마지막 업데이트**: 2025년 12월 6일
