@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>홈 네트워크 시각화</title>
+  <style>
+    body { font-family: system-ui, sans-serif; background: #f0f4f8; padding: 2rem; }
+    h1 { margin-bottom: 1rem; }
+    .btn { margin: 0.3rem; padding: 0.5rem 1rem; border: none; border-radius: 5px; font-size: 0.95rem; cursor: pointer; background: #2563eb; color: white; }
+    .btn:hover { background: #1e40af; }
+    .grid { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1.2rem; }
+    .device { flex: 0 0 170px; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,.1); padding: 1rem; text-align: center; transition: background .3s ease; }
+    .device.off { background: #ffe4e6; }
+    .device.on  { background: #d1fae5; }
+    .icon { font-size: 2.4rem; margin-bottom: 0.5rem; }
+    .state { margin-top: 0.4rem; font-weight: 600; }
+    .d-btn { margin-top: 0.5rem; padding: 0.3rem 0.8rem; font-size: 0.8rem; border: none; border-radius: 4px; background: #4b5563; color: white; cursor: pointer; }
+    .d-btn:hover { background: #374151; }
+    #log { margin-top: 2rem; background: white; border: 1px solid #ccc; border-radius: 6px; padding: 1rem; height: 250px; overflow-y: auto; white-space: pre-line; }
+  </style>
+</head>
+<body>
+<h1>스마트 홈 시나리오 시각화</h1>
+<div>
+  <button class="btn" onclick="btnPress('morning')">Morning</button>
+  <button class="btn" onclick="btnPress('sleep')">Sleep</button>
+  <button class="btn" onclick="btnPress('leaving')">LeavingHome</button>
+  <button class="btn" onclick="btnPress('coming')">ComingHome</button>
+  <button class="btn" onclick="cam.detectArrival()">Camera Arrival</button>
+  <button class="btn" onclick="cam.detectDeparture()">Camera Departure</button>
+</div>
+<div class="grid">
+  <div class="device off" id="lightCard">
+    <div class="icon">💡</div><div>거실 조명</div>
+    <div class="state" id="lightState">OFF</div>
+    <button class="d-btn" onclick="toggleLight()">Toggle</button>
+  </div>
+  <div class="device off" id="curtainCard">
+    <div class="icon">🪟</div><div>거실 커튼</div>
+    <div class="state" id="curtainState">CLOSE</div>
+    <button class="d-btn" onclick="toggleCurtain()">Toggle</button>
+  </div>
+  <div class="device off" id="acCard">
+    <div class="icon">❄️</div><div>거실 에어컨</div>
+    <div class="state" id="acState">OFF</div>
+    <button class="d-btn" onclick="toggleAc()">Toggle</button>
+  </div>
+</div>
+<div id="log"></div>
+<script>
+const $log = document.getElementById('log');
+const $cards = {
+  light: document.getElementById('lightCard'),
+  curtain: document.getElementById('curtainCard'),
+  ac: document.getElementById('acCard')
+};
+const $state = {
+  light: document.getElementById('lightState'),
+  curtain: document.getElementById('curtainState'),
+  ac: document.getElementById('acState')
+};
+function println(msg) {
+  $log.textContent += msg + '\n';
+  $log.scrollTop = $log.scrollHeight;
+}
+function setState(device, state) {
+  $state[device].textContent = state;
+  $cards[device].className = 'device ' + (state === 'ON' || state === 'OPEN' ? 'on' : 'off');
+}
+class Device {
+  constructor(name) { this.name = name; }
+}
+class Command { execute() {} }
+class SmartLight extends Device {
+  constructor(name) { super(name); this.state = 'OFF'; }
+  on() { this.state = 'ON'; setState('light', 'ON'); println(this.name + ' : 조명 ON'); }
+  off() { this.state = 'OFF'; setState('light', 'OFF'); println(this.name + ' : 조명 OFF'); }
+}
+class SmartCurtain extends Device {
+  constructor(name) { super(name); this.state = 'CLOSE'; }
+  open() { this.state = 'OPEN'; setState('curtain', 'OPEN'); println(this.name + ' : 커튼 OPEN'); }
+  close() { this.state = 'CLOSE'; setState('curtain', 'CLOSE'); println(this.name + ' : 커튼 CLOSE'); }
+}
+class SmartAirConditioner extends Device {
+  constructor(name) { super(name); this.state = 'OFF'; }
+  on() { this.state = 'ON'; setState('ac', 'ON'); println(this.name + ' : 에어컨 ON'); }
+  off() { this.state = 'OFF'; setState('ac', 'OFF'); println(this.name + ' : 에어컨 OFF'); }
+}
+class LightOnCommand extends Command { constructor(l) { super(); this.l = l; } execute() { this.l.on(); } }
+class LightOffCommand extends Command { constructor(l) { super(); this.l = l; } execute() { this.l.off(); } }
+class CurtainOpenCommand extends Command { constructor(c) { super(); this.c = c; } execute() { this.c.open(); } }
+class CurtainCloseCommand extends Command { constructor(c) { super(); this.c = c; } execute() { this.c.close(); } }
+class AirconOnCommand extends Command { constructor(a) { super(); this.a = a; } execute() { this.a.on(); } }
+class AirconOffCommand extends Command { constructor(a) { super(); this.a = a; } execute() { this.a.off(); } }
+class MacroCommand extends Command {
+  constructor(...cmds) { super(); this.cmds = cmds; }
+  execute() { this.cmds.forEach(cmd => cmd.execute()); }
+}
+class Button {
+  constructor(label, cmd) { this.label = label; this.cmd = cmd; }
+  press() { println('[' + this.label + '] 버튼'); this.cmd.execute(); println(''); }
+}
+class SmartCamera {
+  constructor(name) { this.name = name; this.observers = []; }
+  subscribe(observer) { this.observers.push(observer); }
+  notify(e) { this.observers.forEach(o => o.update(e)); }
+  detectArrival() { println(this.name + ' : 귀가 감지'); this.notify({ type: 'arrival' }); }
+  detectDeparture() { println(this.name + ' : 외출 감지'); this.notify({ type: 'departure' }); }
+}
+class MacroRunner {
+  constructor(evtType, macro) { this.evtType = evtType; this.macro = macro; }
+  update(e) {
+    if (e.type === this.evtType) {
+      println('자동화 : ' + e.type + ' → 매크로 실행');
+      this.macro.execute();
+    }
+  }
+}
+const light = new SmartLight('거실 조명');
+const curtain = new SmartCurtain('거실 커튼');
+const ac = new SmartAirConditioner('거실 에어컨');
+const onLight = new LightOnCommand(light);
+const openCurt = new CurtainOpenCommand(curtain);
+const offAc = new AirconOffCommand(ac);
+const offLight = new LightOffCommand(light);
+const closeCurt = new CurtainCloseCommand(curtain);
+const onAc = new AirconOnCommand(ac);
+const morningMacro = new MacroCommand(onLight, openCurt, offAc);
+const sleepMacro = new MacroCommand(offLight, closeCurt, onAc);
+const leavingMacro = new MacroCommand(offLight, closeCurt, offAc);
+const comingMacro = new MacroCommand(onLight, openCurt, onAc);
+const buttons = {
+  morning: new Button('Morning', morningMacro),
+  sleep: new Button('Sleep', sleepMacro),
+  leaving: new Button('LeavingHome', leavingMacro),
+  coming: new Button('ComingHome', comingMacro)
+};
+function btnPress(key) { buttons[key].press(); }
+const cam = new SmartCamera('현관 카메라');
+cam.subscribe(new MacroRunner('arrival', comingMacro));
+cam.subscribe(new MacroRunner('departure', leavingMacro));
+function toggleLight() {
+  if (light.state === 'OFF') light.on();
+  else light.off();
+}
+function toggleCurtain() {
+  if (curtain.state === 'CLOSE') curtain.open();
+  else curtain.close();
+}
+function toggleAc() {
+  if (ac.state === 'OFF') ac.on();
+  else ac.off();
+}
+</script>
+</body>
+</html>
