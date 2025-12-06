@@ -1,29 +1,29 @@
-# 🏠 SmartHome System
+# SmartHome System
 
 스마트홈 자동화 시스템의 디자인 패턴 구현 프로젝트입니다. 다양한 GoF 디자인 패턴을 활용하여 확장 가능하고 유지보수하기 쉬운 스마트홈 제어 시스템을 개발했습니다.
 
 ---
 
-## 📋 프로젝트 개요
+## 프로젝트 개요
 
 ### 목적
-- **디자인 패턴 학습**: 실무에서 사용하는 주요 디자인 패턴을 스마트홈 시스템에 적용
-- **스마트 장치 관리**: 조명, 커튼, 에어컨 등 다양한 스마트 장치 제어
-- **자동화 시나리오**: 아침, 취침, 외출, 귀가 등 상황별 자동 제어
-- **시각적 인터페이스**: 웹 기반 대시보드로 실시간 상태 확인 및 제어
+- 디자인 패턴 학습: 실무에서 사용하는 주요 디자인 패턴을 스마트홈 시스템에 적용
+- 스마트 장치 관리: 조명, 커튼, 에어컨 등 다양한 스마트 장치 제어
+- 자동화 시나리오: 아침, 취침, 외출, 귀가 등 상황별 자동 제어
+- 시각적 인터페이스: 웹 기반 대시보드로 실시간 상태 확인 및 제어
 
 ### 주요 기능
-- ✅ 개별 장치 제어 (조명, 커튼, 에어컨)
-- ✅ 시나리오 매크로 (Morning, Sleep, LeavingHome, ComingHome)
-- ✅ 카메라 기반 자동화 (귀가/외출 감지)
-- ✅ 실시간 상태 표시 및 로그 기록
-- ✅ 반응형 웹 UI
+- 개별 장치 제어 (조명, 커튼, 에어컨)
+- 시나리오 매크로 (Morning, Sleep, LeavingHome, ComingHome)
+- 카메라 기반 자동화 (귀가/외출 감지)
+- 실시간 상태 표시 및 로그 기록
+- 반응형 웹 UI
 
 ---
 
-## 🏗️ 디자인 패턴 분석
+## 디자인 패턴 분석
 
-### 1️⃣ **Template Method 패턴** (상속 기반 구조)
+### 1. Template Method 패턴 (상속 기반 구조)
 ```javascript
 // Device: 모든 스마트 장치의 기본 틀 정의
 class Device {
@@ -38,7 +38,7 @@ class Device {
 
 ---
 
-### 2️⃣ **Command 패턴** ⭐ (핵심 패턴)
+### 2. Command 패턴 (핵심 패턴)
 ```javascript
 // Command: 모든 명령의 인터페이스
 class Command {
@@ -62,7 +62,7 @@ class LightOnCommand extends Command {
 
 ---
 
-### 3️⃣ **Composite 패턴** (복합 객체)
+### 3. Composite 패턴 (복합 객체)
 ```javascript
 // 여러 명령을 하나의 복합 명령으로 조합
 class MacroCommand extends Command {
@@ -83,7 +83,7 @@ const morningMacro = new MacroCommand(
 
 ---
 
-### 4️⃣ **Observer 패턴** (이벤트 기반 자동화)
+### 4. Observer 패턴 (이벤트 기반 자동화)
 ```javascript
 // Subject: 카메라
 class SmartCamera {
@@ -115,7 +115,7 @@ class MacroRunner {
 
 ---
 
-### 5️⃣ **Facade 패턴** (복잡도 단순화)
+### 5. Facade 패턴 (복잡도 단순화)
 ```javascript
 // 복잡한 시스템 초기화를 한 곳에서 관리
 class HomeFacade {
@@ -152,7 +152,7 @@ const system = HomeFacade.build();
 
 ---
 
-## 📁 프로젝트 구조
+## 프로젝트 구조
 
 ```
 SmartHome-System/
@@ -166,7 +166,7 @@ SmartHome-System/
 
 ---
 
-## 🎯 시스템 아키텍처
+## 시스템 아키텍처
 
 ### 클래스 관계도
 
@@ -197,7 +197,7 @@ MacroRunner (Observer)
 
 ---
 
-## 🚀 사용 방법
+## 사용 방법
 
 ### 1. 웹 기반 시각화 인터페이스 사용
 
@@ -228,7 +228,7 @@ node code/smartHomeT.js
 
 ---
 
-## 💻 주요 코드 예시
+## 주요 코드 예시
 
 ### 시나리오 매크로 설정
 
@@ -265,7 +265,7 @@ cam.detectDeparture();  // 자동으로 LeavingHome 매크로 실행
 
 ---
 
-## 📊 시스템 흐름
+## 시스템 흐름
 
 ### 1. 버튼 클릭 흐름
 ```
@@ -297,7 +297,7 @@ UI 업데이트 + 로그 기록
 
 ---
 
-## 🔧 확장 가능성
+## 확장 가능성
 
 ### 새로운 장치 추가
 ```javascript
@@ -335,29 +335,29 @@ const movieBtn = new Button('Movie', movieMacro);
 
 ---
 
-## 📈 학습 효과
+## 학습 효과
 
 이 프로젝트를 통해 다음을 학습할 수 있습니다:
 
-✅ **객체지향 설계 원칙** (SOLID)
-- Single Responsibility: 각 클래스가 하나의 책임만 가짐
-- Open/Closed: 새 기능 추가 시 기존 코드 수정 최소화
+- 객체지향 설계 원칙 (SOLID)
+  - Single Responsibility: 각 클래스가 하나의 책임만 가짐
+  - Open/Closed: 새 기능 추가 시 기존 코드 수정 최소화
 
-✅ **주요 디자인 패턴 5가지**
-- Template Method, Command, Composite, Observer, Facade
+- 주요 디자인 패턴 5가지
+  - Template Method, Command, Composite, Observer, Facade
 
-✅ **실무 프로그래밍 스킬**
-- 복잡한 시스템의 구조화
-- 유지보수성 높은 코드 작성
-- 확장 가능한 아키텍처 설계
+- 실무 프로그래밍 스킬
+  - 복잡한 시스템의 구조화
+  - 유지보수성 높은 코드 작성
+  - 확장 가능한 아키텍처 설계
 
-✅ **실시간 상태 관리**
-- Observer 패턴을 통한 이벤트 기반 프로그래밍
-- UI와 로직의 분리
+- 실시간 상태 관리
+  - Observer 패턴을 통한 이벤트 기반 프로그래밍
+  - UI와 로직의 분리
 
 ---
 
-## 🌐 GitHub Pages 배포
+## GitHub Pages 배포
 
 ### 방법 1: 루트에 index.html 배포 (권장)
 ```bash
@@ -382,7 +382,7 @@ git push origin main
 
 ---
 
-## 👥 개발팀
+## 개발팀
 
 - **이대성** (Team Lead)
 - **김태윤** (Design & UI)
@@ -392,13 +392,13 @@ git push origin main
 
 ---
 
-## 📝 라이선스
+## 라이선스
 
 이 프로젝트는 교육 목적으로 작성되었습니다.
 
 ---
 
-## 📚 참고 자료
+## 참고 자료
 
 ### 디자인 패턴 참고 도서
 - "Design Patterns: Elements of Reusable Object-Oriented Software" - Gang of Four
@@ -411,7 +411,7 @@ git push origin main
 
 ---
 
-## ❓ FAQ
+## FAQ
 
 **Q: 왜 이렇게 복잡한 패턴을 사용하나요?**
 A: 작은 프로젝트에서는 과설계처럼 보이지만, 장치 10개, 시나리오 100개가 되면 이 구조 없이는 관리 불가능합니다.
@@ -424,11 +424,11 @@ A: 새로운 `MacroCommand` 객체를 만들고 `Button`과 연결하기만 하�
 
 ---
 
-## 🔗 빠른 링크
+## 빠른 링크
 
-- [GitHub 리포지토리](https://github.com/SkyIsland2163/SmartHome-System)
-- [웹 대시보드](https://skyisland2163.github.io/SmartHome-System/)
-- [프로젝트 보고서](./프로젝트%20보고서%20곤고_이대성_김태윤_김민재.hwp)
+- GitHub 리포지토리: https://github.com/SkyIsland2163/SmartHome-System
+- 웹 대시보드: https://skyisland2163.github.io/SmartHome-System/
+- 프로젝트 보고서: ./프로젝트%20보고서%20곤고_이대성_김태윤_김민재.hwp
 
 ---
 
